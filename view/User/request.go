@@ -7,7 +7,7 @@ type InsertUserRequest struct {
 }
 
 type UpdateUserRequest struct {
-	Nama     string `json:"nama" validate:"required"`
-	Email    string `json:"Email" validate:"required"`
-	Password string `json:"Password" validate:"required"`
+	Nama     string `json:"nama"`
+	Email    string `json:"Email"`
+	Password string `json:"Password"`
 }

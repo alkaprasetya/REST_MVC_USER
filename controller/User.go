@@ -17,19 +17,19 @@ type UserController struct {
 }
 
 func (uc *UserController) InsertNewUser(c echo.Context) error {
-	var tmpUser user.InsertUserRequest
+	var User user.InsertUserRequest
 
-	if err := c.Bind(&tmpUser); err != nil {
+	if err := c.Bind(&User); err != nil {
 		log.Warn("salah input")
 		return c.JSON(http.StatusBadRequest, user.BadRequest())
 	}
 
-	if err := uc.Valid.Struct(tmpUser); err != nil {
+	if err := uc.Valid.Struct(User); err != nil {
 		log.Warn(err.Error())
 		return c.JSON(http.StatusBadRequest, user.BadRequest())
 	}
 
-	newUser := mUser.User{Nama: tmpUser.Nama, Email: tmpUser.Email, Password: tmpUser.Password}
+	newUser := mUser.User{Nama: User.Nama, Email: User.Email, Password: User.Password}
 	res, err := uc.Repo.Insert(newUser)
 
 	if err != nil {
@@ -87,7 +87,7 @@ func (uc *UserController) UpdateUser(c echo.Context) error {
 	}
 
 	updateUser := mUser.User{Nama: tmpUser.Nama, Email: tmpUser.Email, Password: tmpUser.Password}
-	res, err := uc.Repo.Insert(updateUser)
+	res, err := uc.Repo.Update(updateUser)
 
 	if err != nil {
 		log.Warn("masalah pada server")
@@ -98,7 +98,7 @@ func (uc *UserController) UpdateUser(c echo.Context) error {
 }
 
 func (uc *UserController) DeleteUser(c echo.Context) error {
-	res, err := uc.Repo.GetAll()
+	res, err := uc.Repo.Delete()
 
 	if err != nil {
 		log.Warn("masalah pada server")

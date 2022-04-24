@@ -53,7 +53,7 @@ func (ur *UserModel) GetAll() ([]User, error) {
 func (ur *UserModel) GetUser() ([]User, error) {
 	arrUser := []User{}
 	id := ur.Db.Select("id")
-	if err := ur.Db.Find(&arrUser, id).Error; err != nil {
+	if err := ur.Db.Select(&arrUser, id).Error; err != nil {
 		log.Warn(err)
 		return nil, errors.New("tidak bisa select data")
 	}
@@ -67,11 +67,28 @@ func (ur *UserModel) GetUser() ([]User, error) {
 	return arrUser, nil
 }
 func (ur *UserModel) Update(updateUser User) (User, error) {
-	id := ur.Db.Select("id")
-	if err := ur.Db.Select(&updateUser, id).Error; err != nil {
+	id := ur.Db.Find("id")
+	if err := ur.Db.Find(&updateUser, id).Error; err != nil {
 		log.Warn(err)
 		return User{}, errors.New("tidak bisa insert data")
 	}
 	log.Info()
 	return updateUser, nil
+}
+
+func (ur *UserModel) Delete() ([]User, error) {
+	arrUser := []User{}
+	id := ur.Db.Select("id")
+	if err := ur.Db.Delete(&arrUser, id).Error; err != nil {
+		log.Warn(err)
+		return nil, errors.New("tidak bisa select data")
+	}
+
+	if len(arrUser) == 0 {
+		log.Warn("tidak ada data")
+		return nil, errors.New("tidak ada data")
+	}
+
+	log.Info()
+	return arrUser, nil
 }
